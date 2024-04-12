@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 
 include(GNUInstallDirs)
 
@@ -6,14 +6,16 @@ option(BUILD_EXAMPLE "Build example" ON)
 option(BUILD_TEST "Build test" ON)
 option(SERIALIZE_INSTALL "Generate the install target." ON)
 
-project(Serialize VERSION 1.0 LANGUAGES CXX)
+project(serialize VERSION 1.0 LANGUAGES CXX)
 
-add_library(Serialize INTERFACE serialize.h)
+add_library(serialize INTERFACE serialize.h)
 
-target_include_directories(
-  Serialize
-  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/serialize.h>
-            $<INSTALL_INTERFACE:/serialize.h>)
+set_property(TARGET serialize PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/serialize.h>"
+)
+set_property(TARGET serialize PROPERTY PUBLIC_HEADER
+  ${CMAKE_CURRENT_BINARY_DIR}/serialize.h)
+
 			
 string(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " -g SERIALIZE_DEBUG")
 string(APPEND CMAKE_CXX_FLAGS_RELEASE_INIT " -O3 -DNDEBUG SERIALIZE_RELEASE")
@@ -30,7 +32,7 @@ if (BUILD_TEST)
 		SERIALIZE_ENABLE_TESTS=1
         "_CONSOLE;"
     )
-	target_link_libraries(test Serialize)
+	target_link_libraries(test serialize)
 endif ()
 if (BUILD_EXAMPLE)
 	add_executable(example "example.cpp")
@@ -45,10 +47,13 @@ if (BUILD_EXAMPLE)
         ">"
         "_CONSOLE;"
     )
-	target_link_libraries(example Serialize)
+	target_link_libraries(example serialize)
 endif ()
 
 
 if (SERIALIZE_INSTALL)
-	INSTALL(TARGETS Serialize)
+	install(TARGETS serialize
+		PUBLIC_HEADER DESTINATION include/serialize
+		INCLUDES DESTINATION include/serialize
+		)
 endif()
