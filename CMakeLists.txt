@@ -8,12 +8,12 @@ option(SERIALIZE_INSTALL "Generate the install target." ON)
 
 project(Serialize VERSION 1.0 LANGUAGES CXX)
 
-add_library(Serialize INTERFACE)
+add_library(Serialize INTERFACE serialize.h)
 
 target_include_directories(
   Serialize
   INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/serialize.h>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/serialize.h>)
+            $<INSTALL_INTERFACE:/serialize.h>)
 			
 string(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " -g SERIALIZE_DEBUG")
 string(APPEND CMAKE_CXX_FLAGS_RELEASE_INIT " -O3 -DNDEBUG SERIALIZE_RELEASE")
@@ -50,6 +50,5 @@ endif ()
 
 
 if (SERIALIZE_INSTALL)
-	INSTALL(TARGETS Serialize 
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+	INSTALL(TARGETS Serialize)
 endif()
