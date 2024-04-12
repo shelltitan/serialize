@@ -48,8 +48,9 @@ if (BUILD_EXAMPLE)
 endif ()
 
 # install and export the library
-install(FILES serialize.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
-install(TARGETS Serialize
+ install(FILES serialize.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+    install(
+        TARGETS Serialize
         EXPORT Serialize
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
