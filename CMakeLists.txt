@@ -8,11 +8,15 @@ option(SERIALIZE_INSTALL "Generate the install target." ON)
 
 project(serialize VERSION 1.0 LANGUAGES CXX)
 
-add_library(serialize INTERFACE serialize.h)
+set(Header_Files
+    "include/serialize.h"
+)
+
+add_library(serialize INTERFACE Header_Files)
 
 target_include_directories(serialize INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/serialize.h>
-    $<INSTALL_INTERFACE:serialize.h>)
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:/include>)
 
 			
 string(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " -g SERIALIZE_DEBUG")
