@@ -10,11 +10,9 @@ project(serialize VERSION 1.0 LANGUAGES CXX)
 
 add_library(serialize INTERFACE serialize.h)
 
-set_property(TARGET serialize PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/serialize.h>"
-)
-set_property(TARGET serialize PROPERTY PUBLIC_HEADER
-  ${CMAKE_CURRENT_BINARY_DIR}/serialize.h)
+target_include_directories(serialize INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/serialize.h>
+    $<INSTALL_INTERFACE:serialize.h>)
 
 			
 string(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " -g SERIALIZE_DEBUG")
@@ -52,8 +50,5 @@ endif ()
 
 
 if (SERIALIZE_INSTALL)
-	install(TARGETS serialize
-		PUBLIC_HEADER DESTINATION include/serialize
-		INCLUDES DESTINATION include/serialize
-		)
+	install(TARGETS serialize)
 endif()
