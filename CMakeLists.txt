@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 
-include(GNUInstallDirs)
-
 option(BUILD_EXAMPLE "Build example" ON)
 option(BUILD_TEST "Build test" ON)
 option(SERIALIZE_INSTALL "Generate the install target." ON)
@@ -9,10 +7,13 @@ option(SERIALIZE_INSTALL "Generate the install target." ON)
 project(serialize VERSION 1.0 LANGUAGES CXX)
 
 set(Header_Files
-    "include/serialize.h"
+	"include/serialize.h"
 )
+source_group("Header Files" FILES ${Header_Files})
 
-add_library(serialize INTERFACE Header_Files)
+include(GNUInstallDirs)
+
+add_library(serialize INTERFACE ${Header_Files})
 
 target_include_directories(serialize INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
