@@ -4,6 +4,7 @@ include(GNUInstallDirs)
 
 option(BUILD_EXAMPLE "Build example" ON)
 option(BUILD_TEST "Build test" ON)
+option(SERIALIZE_INSTALL "Generate the install target." ON)
 
 project(Serialize VERSION 1.0 LANGUAGES CXX)
 
@@ -12,7 +13,7 @@ add_library(Serialize INTERFACE)
 target_include_directories(
   Serialize
   INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/serialize.h>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Serialize>)
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/serialize.h>)
 			
 string(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " -g SERIALIZE_DEBUG")
 string(APPEND CMAKE_CXX_FLAGS_RELEASE_INIT " -O3 -DNDEBUG SERIALIZE_RELEASE")
@@ -47,10 +48,8 @@ if (BUILD_EXAMPLE)
 	target_link_libraries(example Serialize)
 endif ()
 
-# install and export the library
-install(FILES serialize.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
-install(TARGETS Serialize
-        EXPORT Serialize
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+if (SERIALIZE_INSTALL)
+	INSTALL(TARGETS Serialize 
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endif()
